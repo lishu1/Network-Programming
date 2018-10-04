@@ -1,0 +1,68 @@
+<html>
+	<head>
+		<title>Authorization and authentication</title>
+		<script type="text/javascript">
+			// Your Client ID can be retrieved from your project in the Google
+			// Developer Console, https://console.developers.google.com
+			var client_id = '47360613311-3l54a7qcon37rhq3or8lq7bg9315mc2m.apps.googleusercontent.com';
+		
+			var scopes = ["https://www.googleapis.com/auth/calendar.readonly"];
+		
+			/**
+			* Check if current user has authorized this application.
+			*/
+			function checkAuth() {
+				gapi.auth.authorize(
+				{
+					'client_id': client_id,
+					'scope': scopes.join(' '),
+					'immediate': true
+				}, handleAuthResult);
+			}
+		
+			/**
+			* Handle response from authorization server.
+			*
+			* @param {Object} authResult Authorization result.
+			*/
+			function handleAuthResult(authResult) {
+				var authorizeDiv = document.getElementById('authorize-div');
+				if (authResult && !authResult.error) {
+				// Hide auth UI, then load client library.
+				authorizeDiv.style.display = 'none';
+				} else {
+				// Show auth UI, allowing the user to initiate authorization by
+				// clicking authorize button.
+				authorizeDiv.style.display = 'inline';
+				}
+			}
+		
+			/**
+			* Initiate auth flow in response to user clicking authorize button.
+			*
+			* @param {Event} event Button click event.
+			*/
+			function handleAuthClick(event) {
+				gapi.auth.authorize(
+				{client_id: client_id, scope: scopes, immediate: false},
+				handleAuthResult);
+				return false;
+			}
+		</script>
+		<script src="https://apis.google.com/js/client.js?onload=checkAuth">
+		</script>
+	</head>
+	<body>
+		<div id="authorize-div" style="display: none">
+		<script type="text/javascript">
+			var mail = [];
+			function auth(){
+				var a = document.getElementById('mail').value;
+				mail.push(a);
+			}
+		</script>
+		Mail address:<input id="mail" type="text" value=""/>
+		<input id="a" type="button" value="Get Auth" onclick="handleAuthClick(event);"/>
+		</div>
+	</body>
+</html>
